@@ -1,0 +1,1 @@
+# GOAT (**GO** **A**pp **T**emplates) - stub new Go projects
