@@ -12,6 +12,7 @@ import (
 var header = "package %s\n\nimport \"fmt\"\n\n"
 var funcStub = "func %s() {\n    fmt.Println(\"Hello World!\")\n}"
 
+// create stub for project and add the default placeholder code to it
 func createStub(path, name string, stubtype bool) error {
 	stubFile, err := createStubFile(path, name, stubtype)
 	defer stubFile.Close()
@@ -21,6 +22,9 @@ func createStub(path, name string, stubtype bool) error {
 	fmt.Fprintf(stubFile, formatStubCode(name, stubtype))
 	return err
 }
+
+// createStubFile creates stub file and returns a the handle to the file and
+// any error that occured while creating it
 func createStubFile(path, name string, pkg bool) (*os.File, error) {
 	stubName := "main.go"
 	if pkg {
@@ -29,6 +33,8 @@ func createStubFile(path, name string, pkg bool) (*os.File, error) {
 	stubPath := filepath.Join(path, stubName)
 	return os.Create(stubPath)
 }
+
+// formatStubCode formats the default code for stub files and return it as a string
 func formatStubCode(name string, isPkg bool) string {
 	funcCode := fmt.Sprintf(funcStub, name)
 	if !isPkg {
@@ -38,11 +44,15 @@ func formatStubCode(name string, isPkg bool) string {
 }
 
 // File path related functions
+
+// pathExists returns true if a path already exists
 func pathExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
 
+// userInput prompts the user for entry of information and returns the information
+// as a string
 func userInput(prompt string) string {
 	var uInput string
 	fmt.Print(prompt)
@@ -75,7 +85,7 @@ func fatalCheck(err error) {
 	}
 }
 
-// fatalCheckm handles errors by showing a message and obscuring the actual error
+// fatalCheckm obscures the actual error with another message
 func fatalCheckm(message string, err error) {
 	if err != nil {
 		Logger.Fatalf("error occured while %s\n", message)
