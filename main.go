@@ -16,12 +16,12 @@ var app = cli.NewApp()
 var Logger = log.New(os.Stdout, app.Name+": ", 0)
 
 func init() {
-	app.Name = "goat"
+	app.Name = "quaku"
 	app.Author = "Ezekiel N. Bukari"
 	app.Email = "enbukari@gmail.com"
 	app.Version = "0.0.1"
 	app.Usage = "stub new Go projects"
-	app.UsageText = `GOlang App Templater[GOAT] is a tool to create and manage Go projects`
+	app.UsageText = `quaku is a tool to create and manage Go projects`
 }
 
 func main() {
@@ -41,7 +41,7 @@ func CreateProject(c *cli.Context) error {
 	}
 	projectName := strings.ToLower(c.Args().Get(0))
 	projectPath, err := filepath.Abs(workDir)
-	fatalCheckMe("resolving home directory of project", err)
+	fatalCheckMe("resolving project dir", err)
 	projectHome := filepath.Join(projectPath, projectName)
 	if pathExists(projectHome) {
 		if !askYesNo("Directory exists. Overwrite? (y/n): ") {
@@ -51,8 +51,10 @@ func CreateProject(c *cli.Context) error {
 		fatalCheckMe("removing existing directory", err)
 	}
 	Logger.Printf("Creating project in %s", projectHome)
-	err = os.MkdirAll(projectHome, os.ModeDir)
+	err = os.MkdirAll(projectHome, os.ModeDir|OS_USER_RWX|OS_ALL_RWX|OS_GROUP_RWX)
+	fatalCheckMe("creating project home", err)
 	err = createStub(projectHome, projectName, isPkg)
+	fatalCheckMe("creating stub file", err)
 	if editorPath != "" {
 		cmd := exec.Command(editorPath, projectHome)
 		_ = cmd.Start()
