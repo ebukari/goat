@@ -1,12 +1,12 @@
-# GOAT (**GO** **A**pp **T**emplates) - stub new Go projects
+# _quaku_ - stub new Go projects
 
 ## CREATE NEW PROJECT
 
-`goat new <projectname>`
+`quaku new <projectname>`
 
 ### USAGE
 
-   goat new [command options] [arguments...]
+   quaku new [command options] [arguments...]
 
 ### OPTIONS
 
